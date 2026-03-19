@@ -7,8 +7,8 @@ app.listen(3000, () => console.log('Web Server Ready'));
 
 function createBot() {
     const bot = mineflayer.createBot({
-        host: 'YOUR_ATERNOS_IP', // Ekhane Aternos IP dao
-        port: 19132,             // Bedrock-er default port eita thake
+        host: 'DragonCraftSMP1.aternos.me', // Ekhane Aternos IP dao
+        port: 59696,             // Bedrock-er default port eita thake
         username: 'AFK_Bot',
         version: false,          // Auto detect
         auth: 'offline'          // Aternos-er cracked server-er jonno
