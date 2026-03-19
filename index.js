@@ -1,32 +1,23 @@
 const mineflayer = require('mineflayer');
-const express = require('express');
-const app = express();
-
-app.get('/', (req, res) => res.send('AFK Bot is Running!'));
-app.listen(3000, () => console.log('Web Server Ready'));
-
+const config = {
+  host: 'DragonCraftSMP1.aternos.me',
+  port: 59696,
+  username: 'AFK_Bot',
+  auth: 'offline'
+};
+let bot;
 function createBot() {
-    const bot = mineflayer.createBot({
-        host: 'DragonCraftSMP1.aternos.me', // Ekhane Aternos IP dao
-        port: 59696,             // Bedrock-er default port eita thake
-        username: 'AFK_Bot',
-        version: false,          // Auto detect
-        auth: 'offline'          // Aternos-er cracked server-er jonno
-    });
-
-    bot.on('spawn', () => {
-        console.log('Bot joined the Bedrock server!');
-        setInterval(() => {
-            bot.look(bot.entity.yaw + 0.1, 0);
-        }, 5000);
-    });
-
-    bot.on('end', () => {
-        console.log('Disconnected. Reconnecting...');
-        setTimeout(createBot, 5000);
-    });
-
-    bot.on('error', (err) => console.log(err));
+  bot = mineflayer.createBot(config);
+  bot.on('spawn', () => { console.log('Bot connected!'); afk(); });
+  bot.on('kicked', (r) => { console.log('Kicked:' + r); setTimeout(createBot, 10000); });
+  bot.on('error', (e) => { console.log('Error:' + e.message); setTimeout(createBot, 10000); });
+  bot.on('end', () => { setTimeout(createBot, 10000); });
 }
-
+function afk() {
+  setInterval(() => {
+    if (!bot || !bot.entity) return;
+    bot.setControlState('jump', true);
+    setTimeout(() => bot.setControlState('jump', false), 500);
+  }, 30000);
+}
 createBot();
